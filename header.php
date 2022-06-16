@@ -11,9 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link rel="icon" href="https://www.rspcahalifaxhuddersfieldbradford.org.uk/wp-content/uploads/2020/01/favicon-32x32.png">
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-
+    
 </head>
-<body>
+<body onload="slideshow()">
 
 <header>
     <section class="top-bar">

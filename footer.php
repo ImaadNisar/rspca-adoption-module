@@ -2,8 +2,8 @@
     <p>© 2020 RSPCA Halifax, Huddersfield, Bradford & District Branch | Registered Charity No. 225575</p>
     <div class="footer-links">
         <ul>
-            <a href=""><li>Terms & Conditions</li></a>
-            <a href=""><li>Privacy & Cookies</li></a>
+            <a href="https://www.rspcahalifaxhuddersfieldbradford.org.uk/terms-and-conditions/"><li>Terms & Conditions</li></a>
+            <a href="https://www.rspcahalifaxhuddersfieldbradford.org.uk/privacy-cookies/"><li>Privacy & Cookies</li></a>
         </ul>
     </div>
     <a href="https://www.nowdonate.com/checkout/v1rav8120ixd37ya1m84">
@@ -18,5 +18,6 @@
 
 
 
+<script src="scripts.js"></script>
 </body>
 </html>

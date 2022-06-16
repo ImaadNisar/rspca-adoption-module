@@ -1,15 +1,5 @@
-<?php 
-
-
-
-
-
-
-    $connection = mysqli_connect("localhost","admin","imaad123","animalsforadoption");
-    if (!$connection) {
-        echo "Connection Failed!";
-    }
-
+<?php
+    include("dbconnect.php");
 
     // 1. Construct SQL statement
     $sql = "SELECT * FROM animals 
@@ -26,8 +16,16 @@
     mysqli_free_result($result);
     mysqli_close($connection);
 
-    
+    $doSearch = False;
+    $doFilter = False;
 
+    if (isset($_POST["submit"]) && $_POST["search"] != "") {
+        $doSearch = true;
+    }
+
+    if (isset($_GET["submit-filters"])) {
+        $doFilter = true;
+    }
 
 
 ?>
@@ -35,11 +33,128 @@
 
 <?php include("header.php"); ?>
 
+<?php if ($doSearch) { 
+
+    $searchString = $_POST["search"];
+    $searchString = htmlspecialchars($searchString);
+    include("dbconnect.php");
+    $sql = "SELECT * FROM animals WHERE name LIKE '%$searchString%' ORDER BY reserved ASC, name ASC";
+    $result = mysqli_query($connection, $sql);
+    $animals = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_free_result($result);
+    mysqli_close($connection);
+    $length = count($animals);
+?>
+<h2 class="search-title">
+    The search '<?php echo htmlspecialchars($searchString); ?>' returned <?php echo "$length" ?> <?php 
+    if ($length === 1) {
+        echo "result";
+    }else {
+        echo "results";
+    }
+    ?>  
+</h2>
+<?php } ?>
+
+
+<?php 
+
+if ($doFilter) {
+
+
+    $sql = "SELECT * FROM animals";
+    $empty = true;
+
+
+    if (isset($_GET['sex'])) {
+        if ($empty) {
+            $sql .= " WHERE ";
+            $empty = false;
+        }
+        $sql .= " (Sex = '{$_GET['sex']}')";
+    }
+
+    if (isset($_GET['childfriendly'])) {
+        if ($empty) {
+            $sql .= " WHERE ";
+            $empty = false;
+        } else {
+            $sql .= " AND ";
+        }
+        $sql .= " (Childfriendly = 1)";
+    }
+
+    if (isset($_GET['notreserved'])) {
+        if ($empty) {
+            $sql .= " WHERE ";
+            $empty = false;
+        } else {
+            $sql .= " AND ";
+        }
+        $sql .= " (Reserved = 0)";
+
+    }
+
+
+    $species = [];
+
+    if (isset($_GET['dogs'])) {
+        $species[] = " Species = 'Dog'";
+    }
+    if (isset($_GET['cats'])) {
+        $species[] .= " Species = 'Cat'";
+    }
+    if (isset($_GET['rodents'])) {
+        $species[] = " Species = 'Ferret' OR Species = 'Girbil'";
+    }
+    if (isset($_GET['other'])) {
+        $species[] = " Species = Species";
+    }
+
+    if (count($species) >= 1) {
+        if ($empty) {
+            $sql .= " WHERE (";
+        }
+        else {
+            $sql .= " AND (";
+        }
+
+
+        for ($i=0; $i<count($species); $i++) {
+            $sql .= "{$species[$i]}";
+
+            if ($i != count($species) - 1) {
+                $sql .= " OR ";
+            }
+        }
+        $sql .= " )";
+    }
+    
+
+
+    
+
+
+    include("dbconnect.php");
+    $sql .= " ORDER BY reserved ASC, name ASC";
+
+
+    $result = mysqli_query($connection, $sql);
+    $animals = mysqli_fetch_all($result, MYSQLI_ASSOC) ;
+    mysqli_free_result($result);
+    mysqli_close($connection);
+
+}
+
+
+
+?>
+
 <main>
     <div class="search-bar-container">
         <form action="index.php" method="POST">
-            <input type="text" name="search" placeholder="Search" id="search-bar">
-            <input type="submit" name="submit-search" value="" id="search-btn">
+            <input type="text" name="search" placeholder="Search" id="search-bar" maxlength="20">
+            <input type="submit" name="submit" value="" id="search-btn">
         </form>
     </div>
 
@@ -50,43 +165,81 @@
             <div class="filters-title">
                 <h3>Filters</h3><!--
                 --><div class="filter-svg"></div>
-                <form action="index.php" method="POST" class="filters-list">
+                <form action="index.php" method="GET" class="filters-list">
                     <div>
-                        <label for="childfriendly">Child-friendly: </label>
-                        <input type="checkbox" id="childfriendly" value="childfriendly">
+                        <p>Sex:</p>
+                        <label for="male">Male</label>
+                        <input type="radio" value="Male" name="sex" id="male">
+                        <label for="female">Female</label>
+                        <input type="radio" value="Female" name="sex" id="female">
                     </div>
-                    <div>
-                        <label for="reserved">Not Reserved: </label>
-                        <input type="checkbox" id="reserved" value="notreserved">
-                    </div>
-                    <div>
-                        <label for="sex" id="sex-title">Sex: </label>
-                        <label for="sex">Male</label>
-                        <input type="radio" value="male" name="sex">
-                        <label for="sex">Female</label>
-                        <input type="radio" value="female" name="sex">
-                    </div>
+                    <hr>
+                    <div class="species-filter">
+                        <p>Species:</p>
 
-                    <input type="submit" value="Filter" id="submit">
+                        <div>
+                        <label for="dogs">Dogs:</label>
+                        <input type="checkbox" value="true" name="dogs" id="dogs">
+                        </div>
+
+                        <div>
+                        <label for="cats">Cats:</label>
+                        <input type="checkbox" value="true" name="cats" id="cats">
+                        </div>
+
+                        <div>
+                        <label for="rodents">Rodents:</label>
+                        <input type="checkbox" value="true" name="rodents" id="rodents">
+                        </div>
+
+                        <div>                        
+                        <label for="other">Other:</label>
+                        <input type="checkbox" value="true" name="other" id="other">
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div class="misc-filters">
+                        <p>Other:</p>
+                        <div>
+                            <label for="childfriendly">Child-friendly: </label>
+                            <input type="checkbox" id="childfriendly" value="true" name="childfriendly">
+                        </div>
+                        <div>
+                            <label for="reserved">Not Reserved: </label>
+                            <input type="checkbox" id="reserved" value="true" name="notreserved">
+                        </div>
+                    </div>
+                    
+                    
+                    
+
+                    <input type="submit" value="Filter" id="submit" name="submit-filters">
                 </form>
             </div>
         </div>
         </div>
 
-        <div class="animals-container">
+
+        <div class="animals-container animation">
             <?php foreach ($animals as $animal) { ?>
                 <?php $src = $animal["Picture1"]; ?>
                 <div class="whole-animal-container">
-                    <?php if ($animal['Reserved']) {
-                        echo "<a href='view.php'><div class='reserved-cover'>RESERVED</div></a>";
-                    } ?>
+                    <?php if ($animal['Reserved']) { ?>
+                        <a href="view.php?ID=<?php echo $animal['ID'];?>"><div class='reserved-cover'>RESERVED</div></a>
+
+                    <?php } ?>
 
 
 
                     <?php echo "<div class='animal-img'>"; ?>
-                    <?php echo '<a href="view.php" class="img-link-view">'; ?>
+                    <a href="view.php?ID=<?php echo $animal['ID'];?>" class="img-link-view">
+
+
+
+
                     <?php echo "<img src=$src>"; ?>
-                    <?php echo '</a>'; ?>
+                    </a>
                     <?php echo "</div>"; ?>
                         <div class="below-img-info">
                         <?php echo "<div class='animal-name'>{$animal['Name']}</div>"; ?>
@@ -102,6 +255,8 @@
         </div>
     </div>
 </main>
+
+
 
 <?php include("footer.php"); ?>
 
