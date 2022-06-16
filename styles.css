@@ -5,6 +5,10 @@ body {
     
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 
 .top-bar {
     text-align: center;
@@ -70,6 +74,10 @@ body {
     background-color: #818a91;
     width: 36px;
     cursor: pointer;
+    background-image: url('search.svg');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
     
 } 
 
@@ -128,7 +136,11 @@ footer p {
 }
 
 .footer-donate-btn {
-    display: inline-block;
+    float: right;
+    background-color: rgb(255, 183, 0);
+    padding: 20px 30px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 
@@ -147,16 +159,14 @@ footer p {
     color: #757575;
     padding-left: 30px;
     margin-top: 10px;
-
     
 }
 
 .animals-container {
     display: inline-block;
     height: 100%;
-    width: 80em;
-    margin-left: 50px;
-    
+    width: 70em;
+    margin-left: 140px;
 }
 
 .filters-title h3 {
@@ -200,7 +210,7 @@ footer p {
     width: 100px;
     height: 40px;
     border-radius: 10px !important;
-    background-color: #839cbe;
+    background-color: #006aff;
     color: white;
     font-family: "Varela Round", sans-serif;
     font-size: 18px;
@@ -211,7 +221,7 @@ footer p {
 
 #submit:hover {
     cursor: pointer;
-    background-color: #6e85a7;
+    background-color: #0054d3;
 }
 
 
@@ -229,12 +239,63 @@ footer p {
 .animal-img {
     display: inline-block;
     margin: 30px;
+    margin-bottom: 0;
     margin-top: 0;
-    margin-bottom: 100px;
-    padding: 10px;
-    transition: 0.2s ease;
+    transition: transform 0.2s ease;
+    
+    
 }
 
 .animal-img:hover {
-    transform: scale(1.03);
+    transform: scale(1.02) rotate(1deg);
 }
+
+.whole-animal-container {
+    display: inline-block;
+    height: 500px;
+    vertical-align: top;
+    position: relative;
+    padding-top: 10px;
+}
+.animal-name {
+    font-size: 22px;
+}
+
+.below-img-info {
+    color: #136db4;
+    cursor: default;
+    text-align: center;
+    padding-top: 10px;
+    
+}
+.animal-desc {
+    color: #00B5B9;
+    margin: 5px auto;
+}
+
+.animal-memo {
+    width: 250px;
+    word-wrap: break-word;
+    font-size: 14px;
+    margin: auto;
+}
+
+.reserved-cover {
+    position: absolute;
+    background-color: rgb(72, 255, 0);
+    z-index: 5;
+    width: 300px;
+    position: absolute;
+    border-radius: 10px;
+    left: 30px;
+    text-align: center;
+    padding: 130.5px 0;
+    cursor: pointer;
+    color: white;
+    font-family: "Oswald", sans-serif;
+    font-size: 26px;
+    opacity: 0.5;
+
+
+}
+

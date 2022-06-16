@@ -6,9 +6,11 @@
             <a href=""><li>Privacy & Cookies</li></a>
         </ul>
     </div>
+    <a href="https://www.nowdonate.com/checkout/v1rav8120ixd37ya1m84">
     <div class="footer-donate-btn">
         Make a Donation
     </div>
+    </a>
 </footer>
 
 

@@ -1,4 +1,10 @@
 <?php 
+
+
+
+
+
+
     $connection = mysqli_connect("localhost","admin","imaad123","animalsforadoption");
     if (!$connection) {
         echo "Connection Failed!";
@@ -22,6 +28,8 @@
 
     
 
+
+
 ?>
 
 
@@ -29,7 +37,7 @@
 
 <main>
     <div class="search-bar-container">
-        <form action="search.php" method="POST">
+        <form action="index.php" method="POST">
             <input type="text" name="search" placeholder="Search" id="search-bar">
             <input type="submit" name="submit-search" value="" id="search-btn">
         </form>
@@ -45,7 +53,7 @@
                 <form action="index.php" method="POST" class="filters-list">
                     <div>
                         <label for="childfriendly">Child-friendly: </label>
-                        <input type="checkbox" id="childfriendly">
+                        <input type="checkbox" id="childfriendly" value="childfriendly">
                     </div>
                     <div>
                         <label for="reserved">Not Reserved: </label>
@@ -68,11 +76,28 @@
         <div class="animals-container">
             <?php foreach ($animals as $animal) { ?>
                 <?php $src = $animal["Picture1"]; ?>
-                <?php echo '<a href="view.php">'; ?>
-                <?php echo "<div class='animal-img'>"; ?>
-                <?php echo "<img src=$src>"; ?>
-                <?php echo "</div>"; ?>
-                <?php echo '</a>'; ?>
+                <div class="whole-animal-container">
+                    <?php if ($animal['Reserved']) {
+                        echo "<a href='view.php'><div class='reserved-cover'>RESERVED</div></a>";
+                    } ?>
+
+
+
+                    <?php echo "<div class='animal-img'>"; ?>
+                    <?php echo '<a href="view.php" class="img-link-view">'; ?>
+                    <?php echo "<img src=$src>"; ?>
+                    <?php echo '</a>'; ?>
+                    <?php echo "</div>"; ?>
+                        <div class="below-img-info">
+                        <?php echo "<div class='animal-name'>{$animal['Name']}</div>"; ?>
+                        <?php echo "<div class='animal-desc'>{$animal['Sex']} {$animal['Species']} - {$animal['Age']}</div>"; ?>
+                        <?php if (!is_null($animal['Memo'])) {
+                            echo "<div class='animal-memo'>{$animal['Memo']}</div>";
+                        } ?>
+                        </div>
+                </div>
+                
+
             <?php }; ?>
         </div>
     </div>
