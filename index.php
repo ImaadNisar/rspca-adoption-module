@@ -1,4 +1,10 @@
 <?php
+
+    session_start();
+
+    
+
+
     include("dbconnect.php");
 
     // 1. Construct SQL statement
@@ -64,12 +70,14 @@ if ($doFilter) {
 
     $sql = "SELECT * FROM animals";
     $empty = true;
+    $queries = [];
 
 
     if (isset($_GET['sex'])) {
         if ($empty) {
             $sql .= " WHERE ";
             $empty = false;
+            $queries[] = $_GET['sex'];
         }
         $sql .= " (Sex = '{$_GET['sex']}')";
     }
@@ -81,6 +89,7 @@ if ($doFilter) {
         } else {
             $sql .= " AND ";
         }
+        $queries[] = 'Childfriendly';
         $sql .= " (Childfriendly = 1)";
     }
 
@@ -91,6 +100,7 @@ if ($doFilter) {
         } else {
             $sql .= " AND ";
         }
+        $queries[] = 'Not Reserved';
         $sql .= " (Reserved = 0)";
 
     }
@@ -100,15 +110,19 @@ if ($doFilter) {
 
     if (isset($_GET['dogs'])) {
         $species[] = " Species = 'Dog'";
+        $queries[] = 'Dogs';
     }
     if (isset($_GET['cats'])) {
         $species[] .= " Species = 'Cat'";
+        $queries[] = 'Cats';
     }
     if (isset($_GET['rodents'])) {
         $species[] = " Species = 'Ferret' OR Species = 'Girbil'";
+        $queries[] = 'Rodents';
     }
     if (isset($_GET['other'])) {
         $species[] = " Species = Species";
+        $queries[] = 'Other';
     }
 
     if (count($species) >= 1) {
@@ -143,7 +157,12 @@ if ($doFilter) {
     $animals = mysqli_fetch_all($result, MYSQLI_ASSOC) ;
     mysqli_free_result($result);
     mysqli_close($connection);
-
+    echo "<div class='filter-top'>";
+    foreach ($queries as $query) {
+        echo "<span class='filter-top-indiv'> | $query </span>";
+    }
+    echo " |";
+    echo "</div>";
 }
 
 
@@ -256,6 +275,14 @@ if ($doFilter) {
     </div>
 </main>
 
+
+<?php 
+
+$_SESSION['views'] = array();
+foreach ($animals as $animal) {
+    $_SESSION['views'] += [$animal['ID'] => false];
+}
+?>
 
 
 <?php include("footer.php"); ?>

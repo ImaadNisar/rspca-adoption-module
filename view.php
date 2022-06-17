@@ -1,4 +1,10 @@
 <?php 
+
+    session_start();
+
+
+
+
     include("dbconnect.php");
 
     if (isset($_GET['ID'])) {
@@ -14,6 +20,56 @@
         
         
     }
+
+    include('dbconnect.php');
+
+    $sql = "SELECT * from animals WHERE ID = '$id'";
+        
+    $result = mysqli_query($connection, $sql);
+
+    $views = mysqli_fetch_assoc($result)['Views'];
+
+    mysqli_free_result($result);
+
+    mysqli_close($connection);
+
+
+    if (!($_SESSION['views']["$id"])) {
+        include('dbconnect.php');
+
+        $sql = "SELECT * from animals WHERE ID = '$id'";
+        
+        $result = mysqli_query($connection, $sql);
+
+        $views = mysqli_fetch_assoc($result)['Views'];
+
+
+        mysqli_free_result($result);
+
+
+
+        $newViews = $views + 1;
+
+        $sql = "UPDATE animals SET Views = $newViews WHERE ID = '$id'";
+
+        $result = mysqli_query($connection, $sql);
+
+        $sql = "SELECT Views from animals WHERE ID = '$id'";
+        
+        $result1 = mysqli_query($connection, $sql);
+       
+        $views = mysqli_fetch_assoc($result1)['Views'];
+        
+
+        mysqli_free_result($result1);
+
+        mysqli_close($connection);
+        
+        
+        
+        $_SESSION['views']["$id"] = true;
+    }
+    
 ?>
 
 
@@ -37,7 +93,14 @@
     </div>
 
     <div class="animal-information">
-        <h2><?php echo "{$animal['Name']}"; ?></h2>
+        <h4><?php echo "$views"; 
+        if ($views == 1) {
+            echo " person has ";
+        } else {
+            echo " people have ";
+        }
+        echo "viewed {$animal['Name']}";?></h4>
+        <h2><?php echo "{$animal['Name']} - {$animal['ID']}"; ?></h2>
         <h3><?php echo "{$animal['Sex']} {$animal['Species']} - {$animal['Age']}"; ?></h3>
         <p class="desc"><?php echo "{$animal['LongDescription']}"; ?></p>
         <?php

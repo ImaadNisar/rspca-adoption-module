@@ -398,3 +398,17 @@ footer p {
         width: 700px
     }
 }
+
+.animal-information h4 {
+    color: #006aff;
+}
+
+.filter-top-indiv {
+    white-space: normal;
+}
+
+.filter-top {
+    text-align: center;
+    font-size: 28px;
+    padding-top: 30px;
+}
