@@ -158,10 +158,11 @@ if ($doFilter) {
     mysqli_free_result($result);
     mysqli_close($connection);
     echo "<div class='filter-top'>";
+    
     foreach ($queries as $query) {
         echo "<span class='filter-top-indiv'> | $query </span>";
     }
-    echo " |";
+    if (count($queries) > 0) {echo " |";};
     echo "</div>";
 }
 
