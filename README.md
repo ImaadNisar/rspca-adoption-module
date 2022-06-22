@@ -1,6 +1,6 @@
 # RSPCA Adoption Module Revamped
 
-A simple, minimalistic take on the current RSPCA Huddersfield, Halifax and Bradford adoption page with a few added features :)
+# A simple, minimalistic take on the current RSPCA Huddersfield, Halifax and Bradford adoption page with a few added features :)
 
 Includes view counter, search bar, filters and an overall better web design
 
